@@ -9,7 +9,7 @@ const userSchema = new Schema({
 
 const taskSchema = new Schema(
   {
-    userid: { type: ObjectId, ref: user },
+    userid: { type: ObjectId, ref: "user" },
     title: String,
     completed: { type: Boolean, default: false },
   },
@@ -19,4 +19,4 @@ const taskSchema = new Schema(
 const userModel = mongoose.model("user", userSchema);
 const taskModel = mongoose.model("task", taskSchema);
 
-export { userModel, taskModel };
+module.exports = { userModel, taskModel };
