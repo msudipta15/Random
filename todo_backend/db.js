@@ -7,11 +7,14 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 });
 
-const taskSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  userid: { type: ObjectId, required: true, reference: "user" },
-});
+const taskSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String },
+    userid: { type: ObjectId, required: true, reference: "user" },
+  },
+  { timestamps: true }
+);
 
 const userModel = mongoose.model("user", userSchema);
 const taskModel = mongoose.model("task", taskSchema);
