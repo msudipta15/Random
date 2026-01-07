@@ -1,5 +1,5 @@
 {
-  "name": "todo",
+  "name": "todo_backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,10 +11,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.51.4",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1",
-    "mongoos": "^0.0.1-security",
-    "mongoose": "^9.1.1"
+    "express": "^5.2.1"
   }
 }
