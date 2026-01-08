@@ -53,14 +53,31 @@ app.post("/signin", async function (req, res) {
   const username = req.body.username;
   const password = req.body.password;
 
-  const founduser = await userModel.findOne({ username });
+  try {
+    const founduser = await userModel.findOne({ username });
 
-  if (!founduser) {
-    res.status(402).json({ msg: "No user found with this username !" });
-    return;
+    if (!founduser) {
+      res.status(402).json({ msg: "No user found with this username !" });
+      return;
+    }
+
+    const validpassword = await bcrypt.compare(password, founduser.password);
+
+    if (!validpassword) {
+      res.status(402).json({ msg: "Invalid password !" });
+      return;
+    }
+
+    const token = await jwt.sign(
+      { id: founduser._id.toString() },
+      process.env.jwt_key
+    );
+
+    res.status(200).json({ token: token });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Something went wrong !" });
   }
-
-  const validpassword = await bcrypt.compare(founduser.password, 10);
 });
 
 app.listen(3000);
