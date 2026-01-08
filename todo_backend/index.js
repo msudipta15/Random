@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { userModel, taskModel } = require("./db");
 const jwt = require("jsonwebtoken");
+const { auth } = require("./middleware/auth");
 
 dotenv.config();
 
@@ -78,6 +79,22 @@ app.post("/signin", async function (req, res) {
     console.log(error);
     res.status(500).json({ msg: "Something went wrong !" });
   }
+});
+
+app.post("/addtodo", auth, async function (req, res) {
+  const title = req.body.title;
+  const id = req.id;
+
+  try {
+    await taskModel.create({ title, userid: id });
+    res.status(200).json({ msg: "Task added successfully" });
+  } catch (error) {
+    res.status(500).json({ msg: "Something went wrong !" });
+  }
+});
+
+app.get("/alltask", auth, async function (req, res) {
+  const id = req.id;
 });
 
 app.listen(3000);
