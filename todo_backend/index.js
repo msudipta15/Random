@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const { userModel, taskModel } = require("./db");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ app.post("/signup", async function (req, res) {
   const username = req.body.username;
   const password = req.body.password;
 
+  const hashpassword = await bcrypt.hash(password, 10);
+
   const founduser = await userModel.findOne({ username: username });
 
   if (founduser) {
@@ -33,15 +37,30 @@ app.post("/signup", async function (req, res) {
   }
 
   try {
-    const signup = await userModel.create({ username, password });
+    const signup = await userModel.create({ username, password: hashpassword });
     if (signup) {
       res.status(200).json({ msg: "Sign up successfull !" });
     } else {
       res.status(402).json({ msg: "Error signing up !" });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ msg: "Something went wrong !" });
   }
+});
+
+app.post("/signin", async function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  const founduser = await userModel.findOne({ username });
+
+  if (!founduser) {
+    res.status(402).json({ msg: "No user found with this username !" });
+    return;
+  }
+
+  const validpassword = await bcrypt.compare(founduser.password, 10);
 });
 
 app.listen(3000);
