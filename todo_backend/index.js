@@ -95,6 +95,18 @@ app.post("/addtodo", auth, async function (req, res) {
 
 app.get("/alltask", auth, async function (req, res) {
   const id = req.id;
+
+  try {
+    const tasks = await taskModel.find({ userid: id });
+
+    if (tasks.length !== 0) {
+      res.status(200).json({ tasks: `${tasks}` });
+    } else {
+      res.status(200).json({ msg: "No tasks found !" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Something went wrong !" });
+  }
 });
 
 app.listen(3000);
