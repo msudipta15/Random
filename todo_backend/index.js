@@ -110,4 +110,19 @@ app.get("/alltask", auth, async function (req, res) {
   }
 });
 
+app.delete("/task/:id", auth, async function (req, res) {
+  const userid = req.id;
+  const taskid = req.params.id;
+
+  try {
+    const task = await taskModel.findOne({ _id: taskid, userid: userid });
+    if (task) {
+      await taskModel.deleteOne({ _id: taskid, userid: userid });
+      res.status(200).json({ msg: "Task deleted successfully !" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Something went wrong !" });
+  }
+});
+
 app.listen(3000);
