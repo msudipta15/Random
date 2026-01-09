@@ -99,8 +99,9 @@ app.get("/alltask", auth, async function (req, res) {
   try {
     const tasks = await taskModel.find({ userid: id });
 
+    const titles = tasks.map((t) => t.title);
     if (tasks.length !== 0) {
-      res.status(200).json({ tasks: `${tasks}` });
+      res.status(200).json(titles);
     } else {
       res.status(200).json({ msg: "No tasks found !" });
     }
