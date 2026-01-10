@@ -120,8 +120,18 @@ app.put("/edit/:taskid", auth, async function (req, res) {
     const task = await taskModel.findOne({ _id: taskid, userid: userid });
 
     if (task) {
+      if (!title) {
+        res.status(405).json({ msg: "Title is required !" });
+        return;
+      }
+      task.title = title;
+      task.save();
+    } else {
+      res.status(405).json({ msg: "Invalid task id" });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ msg: "Something went wrong !" });
+  }
 });
 
 app.delete("/task/:id", auth, async function (req, res) {
