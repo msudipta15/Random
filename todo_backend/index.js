@@ -110,6 +110,20 @@ app.get("/alltask", auth, async function (req, res) {
   }
 });
 
+app.put("/edit/:taskid", auth, async function (req, res) {
+  const userid = req.id;
+  const taskid = req.params.taskid;
+
+  const title = req.body.title;
+
+  try {
+    const task = await taskModel.findOne({ _id: taskid, userid: userid });
+
+    if (task) {
+    }
+  } catch (error) {}
+});
+
 app.delete("/task/:id", auth, async function (req, res) {
   const userid = req.id;
   const taskid = req.params.id;
